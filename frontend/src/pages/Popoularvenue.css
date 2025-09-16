@@ -1,0 +1,275 @@
+/* VenuesCarousel.css */
+:root {
+  --primary: #ff758c;
+  --primary-light: #ff8da3;
+  --secondary: #ff7eb3;
+  --dark: #2e2e2e;
+  --medium: #666;
+  --light: #f9f9f9;
+  --white: #ffffff;
+  --shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  --radius: 16px;
+}
+
+.venues-section {
+  padding: 80px 0;
+  position: relative;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.section-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.section-header p {
+  color: var(--medium);
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+}
+
+.carousel-container {
+  position: relative;
+  padding: 0 60px;
+}
+
+.venues-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 30px;
+  padding: 30px 10px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.venues-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.venue-card {
+  flex: 0 0 auto;
+  width: 280px;
+  scroll-snap-align: start;
+  background: var(--white);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  position: relative;
+}
+
+.venue-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.venue-image {
+  height: 180px;
+  overflow: hidden;
+  position: relative;
+}
+
+.venue-image:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  z-index: 1;
+}
+
+.venue-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.venue-card:hover .venue-image img {
+  transform: scale(1.1);
+}
+
+.venue-content {
+  padding: 20px;
+}
+
+.venue-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--dark);
+}
+
+.localities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.localities a {
+  color: var(--medium);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: var(--transition);
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 20px;
+}
+
+.localities a:hover {
+  color: var(--primary);
+  background: rgba(255, 117, 140, 0.1);
+}
+
+.all-localities {
+  display: inline-flex;
+  align-items: center;
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.all-localities i {
+  margin-left: 6px;
+  transition: var(--transition);
+  font-size: 0.8rem;
+}
+
+.all-localities:hover {
+  color: var(--secondary);
+}
+
+.all-localities:hover i {
+  transform: translateX(3px);
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: var(--white);
+  border: none;
+  border-radius: 50%;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--primary);
+  transition: var(--transition);
+  opacity: 0.9;
+}
+
+.carousel-btn:hover {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--white);
+  transform: translateY(-50%) scale(1.1);
+  opacity: 1;
+}
+
+.carousel-btn.left {
+  left: -10px;
+}
+
+.carousel-btn.right {
+  right: -10px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .venue-card {
+    width: 260px;
+  }
+}
+
+@media (max-width: 992px) {
+  .venues-section {
+    padding: 70px 0;
+  }
+  
+  .section-header h2 {
+    font-size: 2.2rem;
+  }
+  
+  .carousel-container {
+    padding: 0 50px;
+  }
+  
+  .carousel-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-header h2 {
+    font-size: 2rem;
+  }
+  
+  .section-header p {
+    font-size: 1rem;
+  }
+  
+  .venue-card {
+    width: 240px;
+  }
+  
+  .venue-image {
+    height: 160px;
+  }
+}
+
+@media (max-width: 576px) {
+  .venues-section {
+    padding: 60px 0;
+  }
+  
+  .carousel-container {
+    padding: 0 30px;
+  }
+  
+  .venues-carousel {
+    gap: 20px;
+    padding: 25px 5px;
+  }
+  
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .venue-card {
+    width: 220px;
+  }
+  
+  .venue-image {
+    height: 150px;
+  }
+}

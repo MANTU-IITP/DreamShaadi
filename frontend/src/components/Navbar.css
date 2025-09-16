@@ -1,0 +1,233 @@
+/* Navbar.css */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo a {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #e83e8c;
+  margin-bottom: 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.logo a:hover {
+  color: #d42d7b;
+  transform: scale(1.05);
+}
+
+.city-search {
+  display: flex;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(232, 62, 140, 0.2);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.city-search:focus-within {
+  box-shadow: 0 4px 16px rgba(232, 62, 140, 0.3);
+}
+
+#city-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: none;
+  font-size: 1rem;
+  border-radius: 30px 0 0 30px;
+  outline: none;
+  background: transparent;
+}
+
+#city-search-btn {
+  padding: 0 1rem;
+  background: #e83e8c;
+  color: white;
+  border: none;
+  border-radius: 0 30px 30px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+#city-search-btn:hover {
+  background: #d42d7b;
+}
+
+#city-search-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0.5rem 0;
+  justify-content: center;
+  width: 100%;
+  scrollbar-width: none; /* Firefox */
+}
+
+.nav-links::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.nav-links li {
+  position: relative;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+  position: relative;
+  padding-bottom: 5px;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #e83e8c;
+}
+
+.nav-links li a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: #e83e8c;
+  left: 0;
+  bottom: 0;
+  transition: width 0.3s ease;
+}
+
+.nav-links li a:hover::after {
+  width: 100%;
+}
+
+.nav-links li a.active {
+  color: #e83e8c;
+}
+
+.nav-links li a.active::after {
+  width: 100%;
+}
+
+/* Mobile menu button (for future mobile menu implementation) */
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 1rem;
+}
+
+.mobile-menu-btn span {
+  width: 2rem;
+  height: 0.25rem;
+  background: #e83e8c;
+  border-radius: 10px;
+  transition: all 0.3s linear;
+  position: relative;
+  transform-origin: 1px;
+}
+
+/* Tablet and Desktop Styles */
+@media (min-width: 768px) {
+  nav {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    margin-bottom: 0;
+  }
+
+  .city-search {
+    margin: 0 2rem;
+    margin-bottom: 0;
+  }
+
+  .nav-links {
+    justify-content: flex-end;
+    gap: 2rem;
+    overflow: visible;
+  }
+}
+
+/* Large Desktop Styles */
+@media (min-width: 1024px) {
+  .nav-links {
+    gap: 2.5rem;
+  }
+}
+
+/* Small Mobile Styles */
+@media (max-width: 480px) {
+  .logo a {
+    font-size: 1.7rem;
+  }
+  
+  .nav-links {
+    gap: 1rem;
+  }
+  
+  .nav-links li a {
+    font-size: 0.9rem;
+  }
+}
+
+/* Animation for navbar on scroll */
+header.scrolled {
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Focus styles for accessibility */
+#city-input:focus,
+#city-search-btn:focus {
+  outline: 2px solid #e83e8c;
+  outline-offset: 2px;
+}
+
+.nav-links li a:focus {
+  outline: 2px solid #e83e8c;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
