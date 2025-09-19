@@ -1,11 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const vendorSchema = new mongoose.Schema(
    {
-    title: { type: String, required: true },
+    businessname: { type: String, required: true },
     description: { type: String, required: true },
-    host: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-     guest: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  
     image1: { type: String, required: true },
     image2: { type: String, required: true },
     image3: { type: String, required: true },
@@ -24,4 +23,4 @@ const vendorSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Vendor', vendorSchema);
+export default  mongoose.model('Vendor', vendorSchema);
