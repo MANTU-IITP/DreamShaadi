@@ -36,6 +36,8 @@ const Navbar = ({ user = null }) => {
 
         <ul className="nav-links">
           <li><a href="/">Home</a></li>
+          <li><a href="/vendor">Vendor</a></li>
+        
           <li><a href="/vendors/wedding-venues">Venues</a></li>
           <li><a href="/photographers">Photographers</a></li>
           

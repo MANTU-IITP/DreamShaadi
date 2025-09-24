@@ -3,10 +3,12 @@ import mongoose from "mongoose";
 // import User from "./models/User.js"
 import Vendor from "./models/Vendor.js";
 import bodyParser from "body-parser"
+import cors from "cors"
 let Port=3000;
 
 const app=express();
 app.use(bodyParser.json())
+app.use(cors());
 
 
 main().catch(err => console.log(err));

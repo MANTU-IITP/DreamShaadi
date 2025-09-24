@@ -8,7 +8,7 @@ const vendorSchema = new mongoose.Schema(
     image1: { type: String, required: true },
     image2: { type: String, required: true },
     image3: { type: String, required: true },
-    rent: { type: Number, required: true },
+    price: { type: Number, required: true },
     city: { type: String, required: true },
     landMark: { type: String },
     category: { type: String, required: true },

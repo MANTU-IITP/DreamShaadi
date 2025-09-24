@@ -1,0 +1,93 @@
+.addpost-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  background: #fafafa;
+  min-height: 100vh;
+}
+
+.addpost-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ff4e50;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.addpost-card {
+  background: #fff;
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.addpost-form-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.addpost-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.addpost-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.addpost-field label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #444;
+}
+
+.addpost-field input,
+.addpost-field select,
+.addpost-field textarea {
+  padding: 0.7rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.addpost-field input:focus,
+.addpost-field select:focus,
+.addpost-field textarea:focus {
+  border-color: #ff4e50;
+  box-shadow: 0 0 6px rgba(255, 78, 80, 0.3);
+}
+
+.addpost-btn {
+  background: #ff4e50;
+  color: white;
+  font-weight: 600;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.addpost-btn:hover {
+  background: #e04345;
+  transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+  .addpost-card {
+    padding: 1.5rem;
+  }
+}
