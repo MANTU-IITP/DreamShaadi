@@ -31,22 +31,23 @@ function Postdetail() {
   }, [id]);
 
   // handle delete
-  const handleDelete = async() => {
-    await axios.delete(`http://localhost:3000/vendor/post/delete/${id}`)
-    .then((response)=>{
-          console.log(response)
-          navigate("/vendor")
+const handleDelete = async () => {
+  if (!window.confirm("Delete this post?")) return;
+  try {
+    const token = localStorage.getItem("token") || "";
+    const res = await axios.delete(`http://localhost:3000/vendor/post/delete/${id}`, {
+     headers: {
+  Authorization: localStorage.getItem("token") // send raw token only
+}
+    });
+    console.log("Deleted:", res.data);
+    navigate("/vendor");
+  } catch (err) {
+    console.error("Delete error:", err.response ?? err);
+    alert("Delete failed. Only the creator can delete this post.");
+  }
+};
 
-          
-
-        })
-        .catch((error)=>{
-            console.log(error)
-
-        })
-
-    
-  };
 
   // handle edit → redirect to edit page
   const handleEdit = () => {

@@ -21,15 +21,20 @@ const EditPost = () => {
 
   // Fetch existing vendor data
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/vendor/post/getone/${id}`)
-      .then((res) => {
-        setVendorData((prev) => ({ ...prev, ...res.data })); // safe merge
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const fetchPost = async () => {
+      try {
+        const token = localStorage.getItem("token") || "";
+        const res = await axios.get(`http://localhost:3000/vendor/post/getone/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setVendorData((prev) => ({ ...prev, ...res.data }));
+      } catch (err) {
+        console.log("Fetch post error:", err.response ?? err);
+      }
+    };
+    fetchPost();
   }, [id]);
+
 
   // Handle input changes
   const inputhandeler = (e) => {
@@ -40,17 +45,26 @@ const EditPost = () => {
   // Form submit (update)
   const formsubmit = async (e) => {
     e.preventDefault();
+
     try {
+      const token = localStorage.getItem("token") || "";
       const response = await axios.put(
         `http://localhost:3000/vendor/post/update/${id}`,
-        vendorData
+        vendorData,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token") // send raw token only
+          }
+        }
       );
       console.log("Updated:", response.data);
-      navigate("/vendor"); // go back after success
+      navigate("/vendor");
     } catch (error) {
-      console.log(error);
+      console.log("Update error:", error.response ?? error);
+      alert("Update failed. Make sure you are the owner and logged in.");
     }
   };
+
 
   return (
     <div className="addpost-container">

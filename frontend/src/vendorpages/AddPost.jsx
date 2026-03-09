@@ -16,7 +16,7 @@ const AddPost = () => {
   };
 
   const [vendorData, setVendorData] = useState(initialVendorData);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,19 +26,33 @@ const AddPost = () => {
     }));
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-   await axios.post("http://localhost:3000/vendor/post/create",vendorData)
-   .then((response)=>{
-    console.log(response)
-    navigate("/vendor")
 
-   }).catch((error)=>{
-    console.log(error)
 
-   });
-   
+
+
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/vendor/post/create",
+        vendorData,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token") // send raw token only
+          },
+        }
+      );
+
+
+      console.log("Post created:", res.data);
+      navigate("/vendor");
+    } catch (error) {
+      console.error("AddPost error:", error.response ?? error);
+      alert("Error adding post. Make sure you are logged in.");
+    }
   };
+
 
   return (
     <div className="addpost-container">

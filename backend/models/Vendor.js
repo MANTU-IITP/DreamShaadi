@@ -12,6 +12,7 @@ const vendorSchema = new mongoose.Schema(
     city: { type: String, required: true },
     landMark: { type: String },
     category: { type: String, required: true },
+     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     rating:{
       type:Number,
       min:0,

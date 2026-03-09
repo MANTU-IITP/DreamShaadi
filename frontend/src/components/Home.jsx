@@ -8,6 +8,7 @@ import WeddingCategories from '../pages/WeddingCategories.jsx'
 import Footer from './Footer.jsx'
 
 const Home = () => {
+ 
   return (
     <div>
     <Navbar/>
