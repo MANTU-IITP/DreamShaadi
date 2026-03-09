@@ -13,7 +13,9 @@ app.use(bodyParser.json())
 app.use(cookieParser());
 app.use(cors({
   origin: "http://localhost:5173", // aapka frontend origin
-  credentials: true
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 
@@ -22,10 +24,12 @@ dotenv.config();
 
 import authRouter from "./routes/AuthRouter.js";
 import vendorRouter from "./routes/vendor.routes.js";
+import adminRouter from "./routes/admin.routes.js";
 
 
 app.use("/auth", authRouter);
 app.use("/vendor/post", vendorRouter);
+app.use("/admin", adminRouter);
 
 
 

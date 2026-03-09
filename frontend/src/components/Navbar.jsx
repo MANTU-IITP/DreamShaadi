@@ -1,70 +1,88 @@
-import React, { useState, useEffect } from 'react';
-import './Navbar.css';
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import "./Navbar.css";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const [cityInput, setCityInput] = useState('');
-  const [user, setUser] = useState(null); // store logged-in user
+  const [searchInput, setSearchInput] = useState("");
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
-  // Check localStorage for logged-in user on component mount
   useEffect(() => {
     const loggedInUser = localStorage.getItem("loggedInUser");
     if (loggedInUser) {
-      setUser(JSON.parse(loggedInUser)); // parse in case you stored as JSON
+      setUser(JSON.parse(loggedInUser));
     }
+    setIsAdmin(localStorage.getItem("isAdmin") === "true");
   }, []);
 
   const handleLogout = () => {
-    if (window.confirm("Do you want to logout?")) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("loggedInUser");
-      setUser(null);
-      navigate("/login");
-    }
+    if (!window.confirm("Do you want to logout?")) return;
+    localStorage.removeItem("token");
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("loggedInEmail");
+    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("role");
+    localStorage.removeItem("vendorProfile");
+    setUser(null);
+    setIsAdmin(false);
+    navigate("/login");
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (cityInput.trim()) {
-      navigate(`/vendors.html?city=${encodeURIComponent(cityInput.trim())}`);
+    const q = searchInput.trim();
+    if (!q) {
+      navigate("/vendor");
+      return;
     }
+    navigate(`/vendor?q=${encodeURIComponent(q)}`);
   };
 
   return (
     <header>
       <nav>
         <div className="logo">
-          <a href="/">DreamShaadi</a>
+          <Link to="/">DreamShaadi</Link>
         </div>
 
-       {/* <form className="city-search" onSubmit={handleSearch}>
+        <form className="city-search" onSubmit={handleSearch}>
           <input
             type="text"
-            placeholder="Search by city..."
-            value={cityInput}
-            onChange={(e) => setCityInput(e.target.value)}
+            placeholder="Search vendors by city, category, or name"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
-          <button type="submit">
-            
-          </button>
-        </form>  */}
+          <button type="submit">Search</button>
+        </form>
 
         <ul className="nav-links">
-          <li><a href="/">Home</a></li>
-          <li><a href="/vendor">Vendor</a></li>
-          <li><a href="/vendors/wedding-venues">Venues</a></li>
-          <li><a href="/photographers">Photographers</a></li>
-
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/vendor">Vendor</Link>
+          </li>
+          {isAdmin && (
+            <li>
+              <Link to="/admin">Admin</Link>
+            </li>
+          )}
           {user ? (
             <>
               <li>Hi, {user}</li>
-              <li><button onClick={handleLogout}>Logout</button></li>
+              <li>
+                <button onClick={handleLogout}>Logout</button>
+              </li>
             </>
           ) : (
             <>
-              <li><a href="/login">Login</a></li>
-              <li><a href="/signup">Signup</a></li>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              <li>
+                <Link to="/signup">Signup</Link>
+              </li>
             </>
           )}
         </ul>
@@ -74,5 +92,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-

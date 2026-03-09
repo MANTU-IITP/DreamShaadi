@@ -12,8 +12,12 @@ export const ensureAuthenticated = (req, res, next) => {
   //   "Bearer <token>"  OR  "<token>"
   // so it's resilient to both frontend styles.
   const token = authHeader.startsWith("Bearer ")
-    ? authHeader.split(" ")[1]
-    : authHeader;
+    ? authHeader.split(" ")[1]?.trim()
+    : authHeader.trim();
+
+  if (!token) {
+    return res.status(403).json({ message: "Unauthorized, JWT token is required" });
+  }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

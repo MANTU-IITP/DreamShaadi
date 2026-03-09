@@ -1,93 +1,103 @@
 .addpost-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem 1rem;
-  background: #fafafa;
   min-height: 100vh;
+  padding: 26px 16px 40px;
+  background: radial-gradient(circle at top right, #ffeef5 0%, #f8fbff 45%, #ffffff 100%);
+  font-family: "Poppins", sans-serif;
 }
 
 .addpost-title {
   font-size: 2rem;
-  font-weight: 700;
-  color: #ff4e50;
-  margin-bottom: 1rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 8px;
   text-align: center;
 }
 
 .addpost-card {
   background: #fff;
   width: 100%;
-  max-width: 600px;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 16px 28px rgba(15, 23, 42, 0.08);
 }
 
 .addpost-form-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 1.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 14px;
   text-align: center;
 }
 
 .addpost-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .addpost-field {
   display: flex;
   flex-direction: column;
+  gap: 6px;
+}
+
+.addpost-field:nth-child(2),
+.addpost-field:last-child {
+  grid-column: 1 / -1;
 }
 
 .addpost-field label {
   font-weight: 600;
-  margin-bottom: 0.3rem;
-  color: #444;
+  color: #334155;
+  font-size: 0.94rem;
 }
 
 .addpost-field input,
 .addpost-field select,
 .addpost-field textarea {
-  padding: 0.7rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.96rem;
   outline: none;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
 .addpost-field input:focus,
 .addpost-field select:focus,
 .addpost-field textarea:focus {
-  border-color: #ff4e50;
-  box-shadow: 0 0 6px rgba(255, 78, 80, 0.3);
+  border-color: #ec4899;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.14);
 }
 
 .addpost-btn {
-  background: #ff4e50;
-  color: white;
-  font-weight: 600;
-  padding: 0.8rem;
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+  color: #fff;
+  font-weight: 700;
+  padding: 12px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: background 0.3s ease, transform 0.1s ease;
+  font-size: 0.98rem;
+  letter-spacing: 0.2px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 
 .addpost-btn:hover {
-  background: #e04345;
-  transform: scale(1.02);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(236, 72, 153, 0.3);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 780px) {
   .addpost-card {
-    padding: 1.5rem;
+    padding: 16px;
+  }
+
+  .addpost-form {
+    grid-template-columns: 1fr;
   }
 }

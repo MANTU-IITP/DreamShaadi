@@ -7,7 +7,8 @@ export default function SignUp() {
   const [signupinfo, setSignupInfo] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    role: 'couple'
   });
   const navigate = useNavigate();
 
@@ -23,7 +24,8 @@ export default function SignUp() {
     e.preventDefault();
     const { name, email, password } = signupinfo;
     if (!name || !email || !password) {
-      return handleError('name, email and password are required')
+      alert('name, email and password are required');
+      return;
     }
 
     try {
@@ -72,6 +74,17 @@ export default function SignUp() {
           onChange={handleChange}
           required
         />
+
+        <label>I am signing up as</label>
+        <select
+          name="role"
+          value={signupinfo.role}
+          onChange={handleChange}
+          required
+        >
+          <option value="couple">Couple / User</option>
+          <option value="vendor">Vendor</option>
+        </select>
 
         <button type="submit">Sign Up</button>
       </form>

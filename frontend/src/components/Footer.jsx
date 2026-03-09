@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faFacebookF, 
@@ -25,8 +26,9 @@ const Footer = () => {
         <div className="footer-column">
           <h4>Vendors</h4>
           <ul>
-            <li><a href="#">Join as Vendor</a></li>
-            <li><a href="#">Vendor Login</a></li>
+            <li><Link to="/vendor/join">Join as Vendor</Link></li>
+            <li><Link to="/login">Vendor Login</Link></li>
+            <li><Link to="/vendor/admin">Vendor Dashboard</Link></li>
             <li><a href="#">Community</a></li>
             <li><a href="#">Vendor Resources</a></li>
             <li><a href="#">Success Stories</a></li>

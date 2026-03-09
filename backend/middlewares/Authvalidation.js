@@ -5,6 +5,7 @@ export const signupValidation = (req, res, next) => {
     name: Joi.string().min(3).max(100).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(4).max(100).required(),
+    role: Joi.string().valid("couple", "vendor", "admin").optional(),
   });
 
   const { error } = schema.validate(req.body);

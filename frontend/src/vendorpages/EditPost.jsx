@@ -15,9 +15,16 @@ const EditPost = () => {
     image3: "",
     category: "",
     price: "",
+    phone: "",
     city: "",
+    state: "",
     landMark: "",
+    galleryImages: [],
+    galleryVideos: [],
+    media: [],
   });
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Fetch existing vendor data
   useEffect(() => {
@@ -42,18 +49,58 @@ const EditPost = () => {
     setVendorData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e) => {
+    setSelectedFiles(Array.from(e.target.files || []));
+  };
+
+  const uploadImages = async () => {
+    if (!selectedFiles.length) return { media: [], images: [], videos: [] };
+    const token = localStorage.getItem("token") || "";
+    if (!token) {
+      throw new Error("Please login first");
+    }
+    const formData = new FormData();
+    selectedFiles.forEach((file) => formData.append("files", file));
+
+    const uploadRes = await axios.post("http://localhost:3000/vendor/post/upload-media", formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return uploadRes.data || { media: [], images: [], videos: [] };
+  };
+
   // Form submit (update)
   const formsubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setIsUploading(true);
+      const uploadedResult = await uploadImages();
+      const payload = { ...vendorData };
+      if ((uploadedResult.images || []).length > 0 || (uploadedResult.videos || []).length > 0) {
+        payload.media = uploadedResult.media || [];
+        payload.galleryImages = uploadedResult.images || [];
+        payload.galleryVideos = uploadedResult.videos || [];
+        payload.image1 = payload.galleryImages[0] || payload.image1;
+        payload.image2 = payload.galleryImages[1] || payload.image2;
+        payload.image3 = payload.galleryImages[2] || payload.image3;
+      }
+      if (!payload.image1) {
+        alert("Please keep at least one uploaded image.");
+        setIsUploading(false);
+        return;
+      }
+
       const token = localStorage.getItem("token") || "";
       const response = await axios.put(
         `http://localhost:3000/vendor/post/update/${id}`,
-        vendorData,
+        payload,
         {
           headers: {
-            Authorization: localStorage.getItem("token") // send raw token only
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`
           }
         }
       );
@@ -61,7 +108,15 @@ const EditPost = () => {
       navigate("/vendor");
     } catch (error) {
       console.log("Update error:", error.response ?? error);
-      alert("Update failed. Make sure you are the owner and logged in.");
+      if (error?.response?.status === 403) {
+        alert("Session expired. Please login again.");
+        navigate("/login");
+      } else {
+        const backendMessage = error?.response?.data?.details || error?.response?.data?.error || error?.message;
+        alert(`Upload failed: ${backendMessage || "Unknown error"}`);
+      }
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -148,6 +203,31 @@ const EditPost = () => {
             />
           </div>
 
+          <div className="addpost-field">
+            <label htmlFor="state">State</label>
+            <input
+              type="text"
+              name="state"
+              id="state"
+              placeholder="Enter state"
+              value={vendorData.state}
+              onChange={inputhandeler}
+            />
+          </div>
+
+          <div className="addpost-field">
+            <label htmlFor="phone">Contact Number</label>
+            <input
+              type="text"
+              name="phone"
+              id="phone"
+              placeholder="Enter contact number"
+              value={vendorData.phone}
+              onChange={inputhandeler}
+              required
+            />
+          </div>
+
           {/* Landmark */}
           <div className="addpost-field">
             <label htmlFor="landMark">Landmark</label>
@@ -162,36 +242,24 @@ const EditPost = () => {
             />
           </div>
 
-          {/* Image URLs */}
+          {/* Media Upload */}
           <div className="addpost-field">
-            <label>Venue Images (URLs)</label>
+            <label htmlFor="galleryFiles">Upload more media (images/videos)</label>
             <input
-              type="text"
-              name="image1"
-              placeholder="Primary Image URL (required)"
-              value={vendorData.image1}
-              onChange={inputhandeler}
-              required
+              type="file"
+              id="galleryFiles"
+              accept="image/*,video/*"
+              multiple
+              onChange={handleFileChange}
             />
-            <input
-              type="text"
-              name="image2"
-              placeholder="Secondary Image URL (optional)"
-              value={vendorData.image2}
-              onChange={inputhandeler}
-            />
-            <input
-              type="text"
-              name="image3"
-              placeholder="Third Image URL (optional)"
-              value={vendorData.image3}
-              onChange={inputhandeler}
-            />
+            {selectedFiles.length > 0 && (
+              <p>{selectedFiles.length} file(s) selected for Cloudinary upload.</p>
+            )}
           </div>
 
           {/* Submit Button */}
-          <button type="submit" className="addpost-btn">
-            Update Venue
+          <button type="submit" className="addpost-btn" disabled={isUploading}>
+            {isUploading ? "Uploading..." : "Update Venue"}
           </button>
         </form>
       </div>

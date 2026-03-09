@@ -32,6 +32,10 @@ export default function Login() {
       // Save token in localStorage
       localStorage.setItem("token", response.data.jwtToken);
       localStorage.setItem("loggedInUser", JSON.stringify(response.data.name));
+      localStorage.setItem("loggedInEmail", response.data.email || "");
+      localStorage.setItem("isAdmin", response.data.isAdmin ? "true" : "false");
+      localStorage.setItem("role", response.data.role || "couple");
+      localStorage.setItem("vendorProfile", JSON.stringify(response.data.vendorProfile || {}));
 
       alert("Login successful!");
 

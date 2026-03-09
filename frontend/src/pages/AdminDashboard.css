@@ -1,0 +1,234 @@
+.admin-page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 18px 40px;
+  font-family: "Poppins", sans-serif;
+  color: #11212d;
+}
+
+.admin-hero {
+  border-radius: 16px;
+  padding: 22px;
+  background: linear-gradient(120deg, #11212d, #2e3944);
+  color: #f4f7f9;
+  margin-bottom: 18px;
+}
+
+.admin-eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin: 0 0 6px;
+}
+
+.admin-hero h1 {
+  margin: 0 0 6px;
+  font-size: 2rem;
+}
+
+.admin-subtitle {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.admin-stat-grid article {
+  border: 1px solid #d9e1e6;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+}
+
+.admin-stat-grid p {
+  margin: 0;
+  color: #526471;
+}
+
+.admin-stat-grid h3 {
+  margin: 8px 0 0;
+  font-size: 1.7rem;
+}
+
+.admin-stat-grid .accent.pending h3 {
+  color: #a15c00;
+}
+
+.admin-stat-grid .accent.approved h3 {
+  color: #156f2b;
+}
+
+.admin-stat-grid .accent.rejected h3 {
+  color: #a32525;
+}
+
+.admin-moderation,
+.admin-users {
+  border: 1px solid #d9e1e6;
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 20px;
+}
+
+.admin-section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.admin-section-head h2 {
+  margin: 0;
+}
+
+.admin-status-tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.admin-status-tabs button {
+  border: 1px solid #c9d4dc;
+  background: #f5f7f8;
+  color: #1f2e38;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+
+.admin-status-tabs .active {
+  background: #11212d;
+  color: #fff;
+  border-color: #11212d;
+}
+
+.admin-vendor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 12px;
+}
+
+.admin-vendor-card {
+  border: 1px solid #d9e1e6;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.admin-vendor-card img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+}
+
+.admin-vendor-body {
+  padding: 10px;
+}
+
+.admin-vendor-body h3 {
+  margin: 0 0 6px;
+}
+
+.admin-vendor-body p {
+  margin: 0 0 6px;
+  color: #354b5a;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.badge.pending {
+  background: #fff5d6;
+  color: #8a5a00;
+}
+
+.badge.approved {
+  background: #def9e4;
+  color: #0d5f22;
+}
+
+.badge.rejected {
+  background: #fde3e3;
+  color: #8c1f1f;
+}
+
+.admin-vendor-body textarea {
+  width: 100%;
+  min-height: 76px;
+  border: 1px solid #c9d4dc;
+  border-radius: 8px;
+  padding: 8px;
+  resize: vertical;
+  margin: 4px 0 8px;
+}
+
+.admin-card-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(70px, 1fr));
+  gap: 7px;
+}
+
+.admin-card-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 9px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+}
+
+.admin-card-actions .approve {
+  background: #1f8a41;
+}
+
+.admin-card-actions .reject {
+  background: #b63030;
+}
+
+.admin-card-actions .reset {
+  background: #406a85;
+}
+
+.admin-user-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-user-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-user-table-wrap th,
+.admin-user-table-wrap td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #e2e8ed;
+}
+
+.admin-info {
+  color: #4b6070;
+}
+
+.admin-error {
+  color: #b63030;
+}
+
+@media (max-width: 700px) {
+  .admin-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

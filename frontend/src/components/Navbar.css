@@ -54,7 +54,7 @@ nav {
   box-shadow: 0 4px 16px rgba(232, 62, 140, 0.3);
 }
 
-#city-input {
+.city-search input {
   flex: 1;
   padding: 0.75rem 1rem;
   border: none;
@@ -64,7 +64,7 @@ nav {
   background: transparent;
 }
 
-#city-search-btn {
+.city-search button {
   padding: 0 1rem;
   background: #e83e8c;
   color: white;
@@ -77,11 +77,11 @@ nav {
   transition: background-color 0.3s ease;
 }
 
-#city-search-btn:hover {
+.city-search button:hover {
   background: #d42d7b;
 }
 
-#city-search-btn svg {
+.city-search button svg {
   width: 18px;
   height: 18px;
 }
@@ -220,10 +220,19 @@ header.scrolled {
 }
 
 /* Focus styles for accessibility */
-#city-input:focus,
-#city-search-btn:focus {
+.city-search input:focus,
+.city-search button:focus {
   outline: 2px solid #e83e8c;
   outline-offset: 2px;
+}
+
+.nav-links li button {
+  border: none;
+  background: #e83e8c;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
 }
 
 .nav-links li a:focus {
