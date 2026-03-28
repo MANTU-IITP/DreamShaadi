@@ -8,27 +8,13 @@
   --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
+ 
+ 
+ 
 
 /* Popular Searches Section */
 .popular-searches {
-  padding: 60px 0;
+  padding: 0px 0;
 }
 
 .section-header {
