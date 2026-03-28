@@ -1,6 +1,3 @@
-import React from 'react';
-import './WeddingCategories.css';
-
 const WeddingCategories = () => {
   const categories = [
     {
@@ -76,26 +73,44 @@ const WeddingCategories = () => {
   ];
 
   return (
-    <div className="container">
+    <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
       <section className="wedding-categories">
-        <div className="section-header">
-          <h2>Wedding Categories</h2>
-          <p>Discover everything you need to make your special day perfect</p>
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Wedding Categories</h2>
+          <p className="text-gray-600 text-lg">Discover everything you need to make your special day perfect</p>
         </div>
         
-        <div className="category-grid">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {categories.map(category => (
-            <div className={`category-card ${category.colorClass}`} key={category.id}>
-              <div className="card-image">
-                <img src={category.image} alt={category.title} />
-                <span className="card-badge"></span>
+            <div 
+              key={category.id}
+              className="group bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-2"
+            >
+              <div className="relative h-48 overflow-hidden">
+                <img 
+                  src={category.image} 
+                  alt={category.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
               </div>
-              <div className="card-content">
-                <h3>{category.title} <i className="fas fa-chevron-right"></i></h3>
-                <p>{category.description}</p>
-                <div className="card-footer">
-                  <a href="#" className="explore-btn">Explore <i className="fas fa-arrow-right"></i></a>
-                </div>
+              <div className="p-5">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2 flex items-center justify-between">
+                  {category.title}
+                  <svg className="w-5 h-5 text-pink-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </h3>
+                <p className="text-gray-600 text-sm mb-4">{category.description}</p>
+                <a 
+                  href="#" 
+                  className="inline-flex items-center text-pink-600 hover:text-pink-700 font-medium text-sm group"
+                >
+                  Explore
+                  <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
               </div>
             </div>
           ))}

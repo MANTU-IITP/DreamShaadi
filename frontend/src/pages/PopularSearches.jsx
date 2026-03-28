@@ -94,7 +94,7 @@ const PopularSearches = () => {
   ];
 
   return (
-    <div className="container">
+    <div className="container-fluid">
       <section className="popular-searches">
         <div className="section-header">
           <h2>Popular Searches</h2>

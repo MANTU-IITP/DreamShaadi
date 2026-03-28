@@ -89,7 +89,7 @@ const Popoularvenue = () => {
   ];
 
   return (
-    <div className="container">
+    <div className="container-fluid">
       <section className="venues-section">
         <div className="section-header">
           <h2>Popular Wedding Venues</h2>
