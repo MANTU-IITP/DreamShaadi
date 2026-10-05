@@ -70,6 +70,18 @@ export const updateVendorApproval = async (req, res) => {
     vendor.approvedAt = status === "approved" ? new Date() : null;
     vendor.approvedBy = status === "approved" ? req.user.userId : null;
     await vendor.save();
+    await User.findByIdAndUpdate(vendor.user, {
+      $push: {
+        notifications: {
+          message: status === "approved"
+            ? `${vendor.businessname} has been approved and is now live`
+            : status === "rejected"
+              ? `${vendor.businessname} was rejected${note ? `: ${note}` : ""}`
+              : `${vendor.businessname} was moved back to pending review`,
+          link: `/vendorpost/${vendor._id}`,
+        },
+      },
+    });
 
     return res.status(200).json({ msg: "Vendor approval updated", vendor });
   } catch (error) {
