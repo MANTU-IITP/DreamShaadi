@@ -1,0 +1,153 @@
+/* =========================================
+   DREAMSHAADI — PREMIUM MODAL SYSTEM
+   ========================================= */
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  overflow-y: auto;
+  background: rgba(29, 15, 21, 0.68);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  animation: ds-modal-backdrop-in 180ms ease both;
+}
+
+.modal-panel {
+  position: relative;
+  width: min(100%, 610px);
+  max-height: min(90vh, 900px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid rgba(201, 166, 107, 0.58);
+  background: #fcf8f2;
+  color: #302326;
+  box-shadow: 0 30px 100px rgba(20, 8, 13, 0.3);
+  animation: ds-modal-panel-in 220ms cubic-bezier(0.2, 0.65, 0.3, 1) both;
+}
+
+.modal-small {
+  width: min(100%, 430px);
+}
+.modal-medium {
+  width: min(100%, 610px);
+}
+.modal-large {
+  width: min(100%, 980px);
+}
+
+.modal-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 24px 25px 21px;
+  border-bottom: 1px solid rgba(118, 43, 63, 0.13);
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(201, 166, 107, 0.14),
+      transparent 35%
+    ),
+    #f8efe5;
+}
+
+.modal-header-flower {
+  display: grid;
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid rgba(201, 166, 107, 0.68);
+  border-radius: 50%;
+  color: #c9a66b;
+  font-size: 21px;
+}
+
+.modal-header-copy {
+  min-width: 0;
+}
+
+.modal-kicker {
+  display: block;
+  margin-bottom: 5px;
+  color: #8b6b51;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #572030;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(22px, 3.2vw, 29px);
+  font-weight: 500;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.icon-button.modal-close {
+  display: grid;
+  width: 35px;
+  height: 35px;
+  flex-shrink: 0;
+  place-items: center;
+  margin-left: auto;
+  border: 1px solid rgba(118, 43, 63, 0.15);
+  border-radius: 50%;
+  background: transparent;
+  color: #762b3f;
+  font-size: 25px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+.icon-button.modal-close:hover {
+  border-color: #762b3f;
+  background: rgba(118, 43, 63, 0.08);
+}
+
+.modal-body {
+  padding: 22px 25px 25px;
+}
+
+@keyframes ds-modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ds-modal-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop,
+  .modal-panel {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -3,6 +3,8 @@ import Home from "./pages/Home";
 import VendorListing from "./pages/VendorListing";
 import VendorDetail from "./pages/VendorDetail";
 import Explore from "./pages/Explore";
+import Stories from "./pages/Stories";
+import HowItWorks from "./pages/HowItWorks";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Wishlist from "./pages/Wishlist";
@@ -25,6 +27,8 @@ const App = () => (
         <Route path="/signup" element={<SignUp />} />
         <Route path="/vendor" element={<VendorListing />} />
         <Route path="/vendor/explore" element={<Explore />} />
+        <Route path="/stories" element={<Stories />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/vendorpost/:id" element={<VendorDetail />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />

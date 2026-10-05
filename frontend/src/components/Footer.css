@@ -1,0 +1,553 @@
+/* =========================================
+   DREAMSHAADI — PREMIUM WEDDING FOOTER
+   Burgundy · Champagne · Ivory
+   ========================================= */
+
+.ds-footer {
+  --df-wine: #572030;
+  --df-wine-light: #762b3f;
+  --df-gold: #d9b777;
+  --df-champagne: #f1dcb7;
+  --df-ivory: #fcf8f2;
+  --df-muted: #dfcbd0;
+  --df-line: rgba(241, 220, 183, 0.19);
+
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  background:
+    radial-gradient(
+      ellipse at 5% 100%,
+      rgba(164, 98, 93, 0.13),
+      transparent 36%
+    ),
+    radial-gradient(
+      ellipse at 95% 0%,
+      rgba(217, 183, 119, 0.09),
+      transparent 32%
+    ),
+    linear-gradient(125deg, #401724 0%, var(--df-wine) 52%, #64263a 100%);
+  color: var(--df-ivory);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.ds-footer *,
+.ds-footer *::before,
+.ds-footer *::after {
+  box-sizing: border-box;
+}
+
+.ds-footer a {
+  text-decoration: none;
+}
+
+/* Decorative divider */
+
+.ds-footer-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 30px 20px 0;
+}
+
+.ds-footer-ornament > span:not(.ds-footer-ornament-flower) {
+  width: min(12vw, 145px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(217, 183, 119, 0.65));
+}
+
+.ds-footer-ornament > span:first-child {
+  transform: rotate(180deg);
+}
+
+.ds-footer-ornament-flower {
+  color: var(--df-gold);
+  font-size: 21px;
+  animation: df-flower-turn 18s linear infinite;
+}
+
+/* Main layout */
+
+.ds-footer-main {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.65fr) repeat(
+      2,
+      minmax(130px, 0.8fr)
+    ) minmax(210px, 1.15fr);
+  gap: clamp(28px, 4vw, 62px);
+  width: min(100% - 100px, 1360px);
+  margin-inline: auto;
+  padding-block: 54px 56px;
+}
+
+.ds-footer-main > * {
+  min-width: 0;
+}
+
+/* Brand */
+
+.ds-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--df-champagne);
+  transition: opacity 180ms ease;
+}
+
+.ds-footer-brand:hover {
+  opacity: 0.83;
+}
+
+.ds-footer-brand-icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  place-items: center;
+  color: var(--df-gold);
+  transition: transform 350ms ease;
+}
+
+.ds-footer-brand:hover .ds-footer-brand-icon {
+  transform: rotate(-8deg) scale(1.04);
+}
+
+.ds-footer-brand-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ds-footer-wordmark {
+  display: flex;
+  flex-direction: column;
+  color: var(--df-ivory);
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.9px;
+}
+
+.ds-footer-wordmark > span {
+  display: inline;
+  color: var(--df-champagne);
+}
+
+.ds-footer-wordmark small {
+  margin-top: 8px;
+  color: var(--df-gold);
+  font-family: Inter, "Segoe UI", sans-serif;
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 1.45px;
+  line-height: 1.4;
+}
+
+.ds-footer-description {
+  max-width: 340px;
+  margin: 25px 0 19px;
+  color: var(--df-muted);
+  font-size: 11px;
+  line-height: 2.05;
+}
+
+/* CTA */
+
+.ds-footer-discover {
+  display: inline-flex;
+  align-items: center;
+  gap: 17px;
+  padding: 0 0 9px;
+  border-bottom: 1px solid rgba(217, 183, 119, 0.6);
+  color: var(--df-champagne);
+  font-size: 11px;
+  font-weight: 700;
+  transition:
+    gap 200ms ease,
+    color 200ms ease;
+}
+
+.ds-footer-discover span {
+  color: var(--df-gold);
+  font-size: 15px;
+  transition: transform 200ms ease;
+}
+
+.ds-footer-discover:hover {
+  gap: 23px;
+  color: #fff;
+}
+
+.ds-footer-discover:hover span {
+  transform: translate(2px, -2px);
+}
+
+.ds-footer-promise {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  color: #cdb6b8;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.ds-footer-promise span {
+  color: var(--df-gold);
+  font-size: 15px;
+}
+
+/* Link columns */
+
+.ds-footer-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ds-footer-column h2 {
+  margin: 7px 0 0;
+  color: var(--df-ivory);
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+
+.ds-footer-heading-line {
+  width: 29px;
+  height: 1px;
+  margin: 15px 0 17px;
+  background: var(--df-gold);
+  transition: width 220ms ease;
+}
+
+.ds-footer-column:hover .ds-footer-heading-line {
+  width: 46px;
+}
+
+.ds-footer-column > a:not(.ds-footer-email) {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 15px;
+  color: var(--df-muted);
+  font-size: 10.5px;
+  line-height: 1.6;
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.ds-footer-column > a:not(.ds-footer-email)::before {
+  width: 0;
+  height: 1px;
+  flex-shrink: 0;
+  background: var(--df-gold);
+  content: "";
+  transition: width 180ms ease;
+}
+
+.ds-footer-column > a:not(.ds-footer-email):hover {
+  color: #fff;
+  transform: translateX(2px);
+}
+
+.ds-footer-column > a:not(.ds-footer-email):hover::before {
+  width: 9px;
+}
+
+/* Contact */
+
+.ds-footer-contact-intro {
+  margin: 0 0 18px;
+  color: var(--df-muted);
+  font-size: 10.5px;
+  line-height: 1.9;
+}
+
+.ds-footer-email {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 17px;
+  color: var(--df-ivory);
+}
+
+.ds-footer-contact-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid rgba(217, 183, 119, 0.38);
+  border-radius: 50%;
+  color: var(--df-gold);
+  font-size: 16px;
+  transition:
+    background-color 200ms ease,
+    transform 200ms ease;
+}
+
+.ds-footer-email:hover .ds-footer-contact-icon {
+  transform: translateY(-2px);
+  background: rgba(217, 183, 119, 0.13);
+}
+
+.ds-footer-email > span:last-child {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+  overflow-wrap: anywhere;
+  font-size: 10px;
+  line-height: 1.5;
+  transition: color 180ms ease;
+}
+
+.ds-footer-email:hover > span:last-child {
+  color: var(--df-champagne);
+}
+
+.ds-footer-email small {
+  color: #cbb2b8;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.15px;
+}
+
+.ds-footer-location {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1px;
+  color: var(--df-muted);
+  font-size: 10.5px;
+}
+
+.ds-footer-location > span:first-child {
+  color: var(--df-gold);
+  font-size: 19px;
+}
+
+/* Bottom bar */
+
+.ds-footer-bottom {
+  display: flex;
+  width: min(100% - 100px, 1360px);
+  min-height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-inline: auto;
+  padding-block: 16px;
+  border-top: 1px solid var(--df-line);
+}
+
+.ds-footer-bottom > p {
+  margin: 0;
+  color: #cbb6bb;
+  font-size: 9px;
+  line-height: 1.8;
+}
+
+.ds-footer-heart {
+  color: #e5b8ae;
+  transition: color 180ms ease;
+}
+
+.ds-footer-bottom > p:hover .ds-footer-heart {
+  color: #ffb2b9;
+}
+
+.ds-footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #cbb6bb;
+  font-size: 9px;
+}
+
+.ds-footer-legal a,
+.ds-footer-back-top {
+  color: #dfcbd0;
+  transition: color 180ms ease;
+}
+
+.ds-footer-legal a:hover,
+.ds-footer-back-top:hover {
+  color: var(--df-champagne);
+}
+
+.ds-footer-back-top {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 9px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.ds-footer-back-top span {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  place-items: center;
+  border: 1px solid rgba(217, 183, 119, 0.4);
+  border-radius: 50%;
+  color: var(--df-gold);
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.ds-footer-back-top:hover span {
+  transform: translateY(-3px);
+  background: rgba(217, 183, 119, 0.12);
+}
+
+/* Animations */
+
+@keyframes df-flower-turn {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+   ========================================= */
+
+@media (max-width: 1100px) {
+  .ds-footer-main {
+    grid-template-columns: minmax(240px, 1.35fr) repeat(2, minmax(125px, 0.8fr));
+    gap: 35px;
+    width: calc(100% - 64px);
+    padding-block: 45px;
+  }
+
+  .ds-footer-contact {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(190px, 1fr) minmax(220px, 1fr);
+    align-items: start;
+    column-gap: 35px;
+  }
+
+  .ds-footer-contact h2,
+  .ds-footer-contact .ds-footer-heading-line,
+  .ds-footer-contact-intro {
+    grid-column: 1 / -1;
+  }
+
+  .ds-footer-contact .ds-footer-heading-line {
+    margin-bottom: 14px;
+  }
+
+  .ds-footer-contact .ds-footer-email {
+    margin-bottom: 12px;
+  }
+
+  .ds-footer-location {
+    grid-column: 1 / -1;
+  }
+
+  .ds-footer-bottom {
+    width: calc(100% - 64px);
+  }
+}
+
+@media (max-width: 700px) {
+  .ds-footer-main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 34px 25px;
+    width: calc(100% - 40px);
+    padding-block: 38px;
+  }
+
+  .ds-footer-intro {
+    grid-column: 1 / -1;
+  }
+
+  .ds-footer-description {
+    max-width: 440px;
+  }
+
+  .ds-footer-contact {
+    grid-column: 1 / -1;
+    display: flex;
+  }
+
+  .ds-footer-bottom {
+    width: calc(100% - 40px);
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 13px 18px;
+    padding-block: 17px;
+  }
+
+  .ds-footer-bottom > p {
+    width: 100%;
+  }
+
+  .ds-footer-legal {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 400px) {
+  .ds-footer-ornament {
+    padding-top: 23px;
+  }
+
+  .ds-footer-main {
+    width: calc(100% - 32px);
+    gap: 29px 17px;
+  }
+
+  .ds-footer-wordmark {
+    font-size: 24px;
+  }
+
+  .ds-footer-brand-icon {
+    width: 39px;
+    height: 39px;
+  }
+
+  .ds-footer-column h2 {
+    font-size: 17px;
+  }
+
+  .ds-footer-column > a:not(.ds-footer-email) {
+    font-size: 10px;
+  }
+
+  .ds-footer-bottom {
+    width: calc(100% - 32px);
+  }
+
+  .ds-footer-back-top {
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-footer *,
+  .ds-footer *::before,
+  .ds-footer *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
