@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import "./Modal.css";
 
 const Modal = ({ open, title, onClose, children, size = "medium" }) => {
   useEffect(() => {
@@ -24,11 +25,15 @@ const Modal = ({ open, title, onClose, children, size = "medium" }) => {
         aria-labelledby="modal-title"
         onMouseDown={(event) => event.stopPropagation()}
       >
-        <header>
-          <h2 id="modal-title">{title}</h2>
-          <button type="button" className="icon-button" onClick={onClose} aria-label="Close">×</button>
+        <header className="modal-header">
+          <span className="modal-header-flower" aria-hidden="true">✳</span>
+          <div className="modal-header-copy">
+            <span className="modal-kicker">DREAMSHAADI</span>
+            <h2 id="modal-title">{title}</h2>
+          </div>
+          <button type="button" className="icon-button modal-close" onClick={onClose} aria-label="Close dialog">×</button>
         </header>
-        {children}
+        <div className="modal-body">{children}</div>
       </section>
     </div>
   );
