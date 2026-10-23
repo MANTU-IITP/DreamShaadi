@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import UserModel from "../models/User.js";
 import { isAdminEmail } from "../middlewares/admin.middleware.js";
+import mongoose from "mongoose";
 
 
 
@@ -104,5 +105,71 @@ export const saveVendorOnboarding = async (req, res) => {
   } catch (error) {
     console.error("saveVendorOnboarding error:", error);
     return res.status(500).json({ message: "Unable to save vendor onboarding" });
+  }
+};
+
+export const getNotifications = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user.userId).select("notifications");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    return res.json([...user.notifications].sort((a, b) => b.createdAt - a.createdAt));
+  } catch (error) {
+    console.error("getNotifications error:", error);
+    return res.status(500).json({ message: "Unable to fetch notifications" });
+  }
+};
+
+export const markNotificationRead = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user.userId).select("notifications");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    const notification = user.notifications.id(req.params.id);
+    if (!notification) return res.status(404).json({ message: "Notification not found" });
+    notification.read = true;
+    await user.save();
+    return res.json({ message: "Notification marked as read", notification });
+  } catch (error) {
+    console.error("markNotificationRead error:", error);
+    return res.status(500).json({ message: "Unable to update notification" });
+  }
+};
+
+export const toggleWishlist = async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.vendorId)) {
+      return res.status(400).json({ message: "Invalid vendor id" });
+    }
+    const user = await UserModel.findById(req.user.userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const vendorId = String(req.params.vendorId);
+    const index = user.wishlist.findIndex((item) => item.toString() === vendorId);
+    let saved = true;
+    if (index >= 0) {
+      user.wishlist.splice(index, 1);
+      saved = false;
+    } else {
+      user.wishlist.push(vendorId);
+    }
+    await user.save();
+    return res.json({ saved, wishlist: user.wishlist });
+  } catch (error) {
+    console.error("toggleWishlist error:", error);
+    return res.status(500).json({ message: "Unable to update wishlist" });
+  }
+};
+
+export const getWishlist = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user.userId).populate({
+      path: "wishlist",
+      match: { approvalStatus: "approved" },
+      select: "-phone -bookings -viewLogs -checkIns",
+    });
+    if (!user) return res.status(404).json({ message: "User not found" });
+    return res.json(user.wishlist.filter(Boolean));
+  } catch (error) {
+    console.error("getWishlist error:", error);
+    return res.status(500).json({ message: "Unable to fetch wishlist" });
   }
 };

@@ -1,75 +1,49 @@
-import React from 'react'
-import Home from './components/Home'
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import VendorListing from "./pages/VendorListing";
+import VendorDetail from "./pages/VendorDetail";
+import Explore from "./pages/Explore";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import Wishlist from "./pages/Wishlist";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
+import AdminDashboard from "./pages/AdminDashboard";
+import VendorJoin from "./vendorpages/VendorJoin";
+import VendorDashboard from "./vendorpages/VendorDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
+import ConsentBanner from "./components/ConsentBanner";
+import EmptyState from "./components/EmptyState";
 
+const App = () => (
+  <>
+    <div className="route-fade">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/vendor" element={<VendorListing />} />
+        <Route path="/vendor/explore" element={<Explore />} />
+        <Route path="/vendorpost/:id" element={<VendorDetail />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
 
+        <Route path="/vendor/join" element={<ProtectedRoute><VendorJoin /></ProtectedRoute>} />
+        <Route path="/vendors/wedding-venues/addpost" element={<ProtectedRoute><VendorJoin /></ProtectedRoute>} />
+        <Route path="/vendor/admin" element={<ProtectedRoute><VendorDashboard /></ProtectedRoute>} />
+        <Route path="/vendor/admin/:id/leads" element={<ProtectedRoute><VendorDashboard initialTab="Leads & Enquiries" /></ProtectedRoute>} />
+        <Route path="/vendor/admin/:id/bookings" element={<ProtectedRoute><VendorDashboard initialTab="Bookings" /></ProtectedRoute>} />
+        <Route path="/vendor/admin/:id/media" element={<ProtectedRoute><VendorDashboard initialTab="Media Manager" /></ProtectedRoute>} />
+        <Route path="/vendorpost/edit/:id" element={<ProtectedRoute><VendorDashboard initialTab="Settings" /></ProtectedRoute>} />
 
-import { Routes,Route } from 'react-router-dom'
-import Vendors from './vendorpages/Vendors'
-import VendorHub from './vendorpages/VendorHub'
-import VendorJoin from './vendorpages/VendorJoin'
-import AddPost from './vendorpages/AddPost'
-import Postdetail from './vendorpages/Postdetail'
-import EditPost from './vendorpages/EditPost'
-import VendorAdmin from './vendorpages/VendorAdmin'
-import VendorLeads from './vendorpages/VendorLeads'
-import VendorMediaManager from './vendorpages/VendorMediaManager'
-import AdminDashboard from './pages/AdminDashboard'
+        <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+        <Route path="*" element={<main className="simple-page"><EmptyState title="Page not found" message="The page you requested does not exist." actionLabel="Return home" onAction={() => window.location.assign("/")} /></main>} />
+      </Routes>
+    </div>
+    <ConsentBanner />
+  </>
+);
 
-import Login from './pages/Login';
-import SignUp from './pages/SignUp'
-import ProtectedRoute from './components/ProtectedRoute'
-import AdminRoute from './components/AdminRoute'
-
-
-const App = () => {
-  return (
-    <Routes>
-     <Route path='/' element={<Home/>} />
-     
-      <Route path="/vendor" element={<Vendors/>}/>
-      <Route path="/vendor/explore" element={<VendorHub/>}/>
-      <Route path="/vendor/join" element={
-      <ProtectedRoute>
-        <VendorJoin />
-      </ProtectedRoute>
-     }/>
-     <Route path="/vendor/admin" element={
-      <ProtectedRoute>
-        <VendorAdmin />
-      </ProtectedRoute>
-     }/>
-     <Route path="/vendor/admin/:id/leads" element={
-      <ProtectedRoute>
-        <VendorLeads />
-      </ProtectedRoute>
-     }/>
-     <Route path="/vendor/admin/:id/media" element={
-      <ProtectedRoute>
-        <VendorMediaManager />
-      </ProtectedRoute>
-     }/>
-     <Route path="/admin" element={
-      <AdminRoute>
-        <AdminDashboard />
-      </AdminRoute>
-     }/>
-     <Route path="/vendors/wedding-venues/addpost" element={
-     <ProtectedRoute>
-      <AddPost/>
-     </ProtectedRoute>}/>
-      <Route path="/vendorpost/:id" element={<Postdetail/>}/>
-     < Route path="/vendorpost/edit/:id" element={
-      <ProtectedRoute>
-     <EditPost/>
-      </ProtectedRoute>
-      
-     }/>
-     <Route path="/login" element={<Login/>}/>
-     <Route path='/signup' element={<SignUp/>}/>
-
-    </Routes>
-  
-  )
-}
-
-export default App
+export default App;

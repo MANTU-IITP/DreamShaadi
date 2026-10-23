@@ -5,6 +5,35 @@ import User from "../models/User.js";
 import { isAdminEmail } from "../middlewares/admin.middleware.js";
 
 const contactOtpStore = new Map();
+const editableVendorFields = [
+  "businessname",
+  "description",
+  "image1",
+  "image2",
+  "image3",
+  "galleryImages",
+  "galleryVideos",
+  "media",
+  "price",
+  "phone",
+  "city",
+  "state",
+  "landMark",
+  "category",
+  "packages",
+  "bookedDates",
+  "availableCities",
+  "socialLinks",
+  "tags",
+];
+
+const pickEditableVendorFields = (source = {}) => Object.fromEntries(
+  editableVendorFields
+    .filter((field) => Object.hasOwn(source, field))
+    .map((field) => [field, source[field]])
+);
+
+const escapeRegex = (value = "") => String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const applyMediaFallbacks = (payload, existing = null) => {
   const galleryImages = Array.isArray(payload.galleryImages) ? payload.galleryImages : [];
@@ -49,7 +78,7 @@ const uploadFilesToCloudinary = async (files = []) => {
 
 export const createVendor = async (req, res) => {
   try {
-    const data = { ...req.body, user: req.user.userId };
+    const data = { ...pickEditableVendorFields(req.body), user: req.user.userId };
     applyMediaFallbacks(data);
     const created = await Vendor.create(data);
     return res.status(201).json(created);
@@ -209,7 +238,9 @@ export const registerVendorView = async (req, res) => {
   try {
     const { viewerName = "", viewerEmail = "", viewerPhone = "" } = req.body || {};
     const vendor = await Vendor.findById(req.params.id);
-    if (!vendor) return res.status(404).json({ msg: "vendor not found" });
+    if (!vendor || vendor.approvalStatus !== "approved") {
+      return res.status(404).json({ msg: "vendor not found" });
+    }
 
     vendor.viewsCount += 1;
     if (viewerName || viewerEmail || viewerPhone) {
@@ -231,10 +262,20 @@ export const createVendorCheckIn = async (req, res) => {
     }
 
     const vendor = await Vendor.findById(req.params.id);
-    if (!vendor) return res.status(404).json({ msg: "vendor not found" });
+    if (!vendor || vendor.approvalStatus !== "approved") {
+      return res.status(404).json({ msg: "vendor not found" });
+    }
 
     vendor.checkIns.push({ name, email, phone, eventDate, guests, message, status: "new" });
     await vendor.save();
+    await User.findByIdAndUpdate(vendor.user, {
+      $push: {
+        notifications: {
+          message: `New enquiry from ${name} for ${vendor.businessname}`,
+          link: `/vendor/admin/${vendor._id}/leads`,
+        },
+      },
+    });
     return res.status(201).json({ msg: "Check-in submitted successfully" });
   } catch (error) {
     console.error("createVendorCheckIn error:", error);
@@ -250,7 +291,9 @@ export const addVendorReview = async (req, res) => {
     }
 
     const vendor = await Vendor.findById(req.params.id);
-    if (!vendor) return res.status(404).json({ msg: "vendor not found" });
+    if (!vendor || vendor.approvalStatus !== "approved") {
+      return res.status(404).json({ msg: "vendor not found" });
+    }
 
     vendor.reviews.push({ name, rating: Number(rating), comment, createdAt: new Date() });
     const avgRating =
@@ -318,7 +361,7 @@ export const updateVendor = async (req, res) => {
       return res.status(403).json({ msg: "Forbidden: you are not the owner" });
     }
 
-    const payload = { ...req.body };
+    const payload = pickEditableVendorFields(req.body);
     applyMediaFallbacks(payload, vendorExist);
     const updated = await Vendor.findByIdAndUpdate(req.params.id, payload, { new: true });
     return res.status(200).json({ msg: "vendor data updated", data: updated });
@@ -341,5 +384,102 @@ export const deleteVendor = async (req, res) => {
   } catch (error) {
     console.error("deleteVendor error:", error);
     return res.status(500).json({ error });
+  }
+};
+
+export const searchVendors = async (req, res) => {
+  try {
+    const {
+      q = "",
+      category = "",
+      city = "",
+      minPrice,
+      maxPrice,
+      rating,
+      sort = "newest",
+      page = 1,
+      limit = 24,
+    } = req.query;
+
+    const filter = { approvalStatus: "approved" };
+    if (q.trim()) {
+      const regex = { $regex: escapeRegex(q.trim()), $options: "i" };
+      filter.$or = [
+        { businessname: regex },
+        { description: regex },
+        { tags: regex },
+        { city: regex },
+        { availableCities: regex },
+      ];
+    }
+    if (category.trim()) {
+      const normalizedCategory = category.trim().toLowerCase();
+      const legacyVenueCategories = ["venue", "banquet hall", "resort", "garden", "hotel", "destination wedding"];
+      filter.category = legacyVenueCategories.includes(normalizedCategory)
+        ? { $in: legacyVenueCategories.map((item) => new RegExp(`^${escapeRegex(item)}$`, "i")) }
+        : { $regex: `^${escapeRegex(category.trim())}$`, $options: "i" };
+    }
+    if (city.trim()) {
+      const cityRegex = { $regex: escapeRegex(city.trim()), $options: "i" };
+      filter.$and = [{ $or: [{ city: cityRegex }, { availableCities: cityRegex }] }];
+    }
+
+    const price = {};
+    if (minPrice !== undefined && minPrice !== "") price.$gte = Number(minPrice);
+    if (maxPrice !== undefined && maxPrice !== "") price.$lte = Number(maxPrice);
+    if (Object.keys(price).length) filter.price = price;
+    if (rating !== undefined && rating !== "") filter.rating = { $gte: Number(rating) };
+
+    const sortOptions = {
+      price_asc: { price: 1 },
+      price_desc: { price: -1 },
+      rating: { rating: -1, createdAt: -1 },
+      newest: { createdAt: -1 },
+    };
+    const parsedLimit = Math.min(Math.max(Number(limit) || 24, 1), 100);
+    const parsedPage = Math.max(Number(page) || 1, 1);
+
+    const [vendors, total] = await Promise.all([
+      Vendor.find(filter)
+        .select("-phone -bookings -viewLogs -checkIns")
+        .sort(sortOptions[sort] || sortOptions.newest)
+        .skip((parsedPage - 1) * parsedLimit)
+        .limit(parsedLimit)
+        .populate("user", "name")
+        .exec(),
+      Vendor.countDocuments(filter),
+    ]);
+
+    return res.json({
+      vendors,
+      total,
+      page: parsedPage,
+      pages: Math.ceil(total / parsedLimit),
+    });
+  } catch (error) {
+    console.error("searchVendors error:", error);
+    return res.status(500).json({ error: "Unable to search vendors" });
+  }
+};
+
+export const getVendorStats = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.params.id).select(
+      "user viewsCount checkIns bookings reviews rating"
+    );
+    if (!vendor) return res.status(404).json({ error: "Vendor not found" });
+    if (vendor.user.toString() !== req.user.userId) {
+      return res.status(403).json({ error: "Only the vendor owner can view stats" });
+    }
+    return res.json({
+      totalViews: vendor.viewsCount,
+      totalLeads: vendor.checkIns.length,
+      totalBookings: vendor.bookings.length,
+      totalReviews: vendor.reviews.length,
+      avgRating: vendor.rating,
+    });
+  } catch (error) {
+    console.error("getVendorStats error:", error);
+    return res.status(500).json({ error: "Unable to fetch vendor stats" });
   }
 };

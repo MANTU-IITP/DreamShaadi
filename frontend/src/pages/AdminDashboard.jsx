@@ -1,200 +1,82 @@
-import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
-import "./AdminDashboard.css";
-
-const STATUS_OPTIONS = ["pending", "approved", "rejected"];
+import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import LoadingSpinner from "../components/LoadingSpinner";
+import Modal from "../components/Modal";
+import api from "../utils/api";
+import { useToast } from "../context/ToastContext";
 
 const AdminDashboard = () => {
   const [dashboard, setDashboard] = useState(null);
   const [vendors, setVendors] = useState([]);
   const [users, setUsers] = useState([]);
-  const [statusFilter, setStatusFilter] = useState("pending");
+  const [tab, setTab] = useState("pending");
   const [loading, setLoading] = useState(true);
+  const [decision, setDecision] = useState(null);
+  const [note, setNote] = useState("");
   const [error, setError] = useState("");
-  const [actionLoadingId, setActionLoadingId] = useState("");
-  const [noteByVendor, setNoteByVendor] = useState({});
+  const { showToast } = useToast();
 
-  const token = localStorage.getItem("token") || "";
-  const authHeaders = { headers: { Authorization: `Bearer ${token}` } };
-
-  const fetchAll = async (status = statusFilter) => {
-    setLoading(true);
-    setError("");
+  const load = async () => {
     try {
-      const [dashRes, vendorRes, userRes] = await Promise.all([
-        axios.get("http://localhost:3000/admin/dashboard", authHeaders),
-        axios.get(`http://localhost:3000/admin/vendors?status=${status}`, authHeaders),
-        axios.get("http://localhost:3000/admin/users", authHeaders),
-      ]);
-      setDashboard(dashRes.data);
-      setVendors(vendorRes.data || []);
-      setUsers(userRes.data || []);
-    } catch (err) {
-      setError(err?.response?.data?.message || err?.response?.data?.error || "Unable to load admin dashboard");
+      setLoading(true);
+      const requests = [api.get("/admin/dashboard"), api.get("/admin/users")];
+      if (tab !== "users") requests.push(api.get("/admin/vendors", { params: tab === "all" ? {} : { status: tab } }));
+      const [dashboardResponse, usersResponse, vendorsResponse] = await Promise.all(requests);
+      setDashboard(dashboardResponse.data);
+      setUsers(usersResponse.data || []);
+      setVendors(vendorsResponse?.data || []);
+      setError("");
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || "Unable to load admin data.");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAll();
-  }, []);
+    load();
+    // `load` intentionally follows the selected moderation tab.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab]);
 
-  const updateApproval = async (vendorId, status) => {
-    setActionLoadingId(vendorId + status);
+  const submitDecision = async () => {
+    if (decision.status === "rejected" && !note.trim()) return setError("A rejection reason is required.");
     try {
-      await axios.patch(
-        `http://localhost:3000/admin/vendors/${vendorId}/approval`,
-        { status, note: noteByVendor[vendorId] || "" },
-        authHeaders
-      );
-      await fetchAll(statusFilter);
-    } catch (err) {
-      alert(err?.response?.data?.error || "Unable to update approval");
-    } finally {
-      setActionLoadingId("");
+      await api.patch(`/admin/vendors/${decision.vendor._id}/approval`, { status: decision.status, note: note.trim() });
+      showToast(`Listing ${decision.status}. The vendor has been notified.`, "success");
+      setDecision(null);
+      setNote("");
+      setError("");
+      await load();
+    } catch (requestError) {
+      setError(requestError.response?.data?.error || "Unable to update approval.");
     }
   };
 
-  const onFilterChange = async (next) => {
-    setStatusFilter(next);
-    await fetchAll(next);
-  };
-
-  const stats = useMemo(() => dashboard?.stats || {}, [dashboard]);
-
   return (
-    <div className="admin-page">
-      <header className="admin-hero">
-        <div>
-          <p className="admin-eyebrow">Platform Control Room</p>
-          <h1>Main Admin Panel</h1>
-          <p className="admin-subtitle">Moderate vendor submissions, monitor growth, and control what goes live.</p>
-        </div>
-      </header>
-
-      <section className="admin-stat-grid">
-        <article>
-          <p>Total Users</p>
-          <h3>{stats.usersCount || 0}</h3>
-        </article>
-        <article>
-          <p>Total Vendors</p>
-          <h3>{stats.vendorsCount || 0}</h3>
-        </article>
-        <article className="accent pending">
-          <p>Pending</p>
-          <h3>{stats.pendingCount || 0}</h3>
-        </article>
-        <article className="accent approved">
-          <p>Approved</p>
-          <h3>{stats.approvedCount || 0}</h3>
-        </article>
-        <article className="accent rejected">
-          <p>Rejected</p>
-          <h3>{stats.rejectedCount || 0}</h3>
-        </article>
-      </section>
-
-      <section className="admin-moderation">
-        <div className="admin-section-head">
-          <h2>Vendor Request Queue</h2>
-          <div className="admin-status-tabs">
-            {STATUS_OPTIONS.map((status) => (
-              <button
-                key={status}
-                className={statusFilter === status ? "active" : ""}
-                onClick={() => onFilterChange(status)}
-                type="button"
-              >
-                {status}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {loading && <p className="admin-info">Loading moderation queue...</p>}
-        {error && <p className="admin-error">{error}</p>}
-
-        {!loading && !error && (
-          <div className="admin-vendor-grid">
-            {vendors.map((vendor) => (
-              <article key={vendor._id} className="admin-vendor-card">
-                <img src={vendor.image1} alt={vendor.businessname} />
-                <div className="admin-vendor-body">
-                  <h3>{vendor.businessname}</h3>
-                  <p>{vendor.city} | {vendor.category}</p>
-                  <p className={`badge ${vendor.approvalStatus}`}>{vendor.approvalStatus}</p>
-                  <p>Owner: {vendor.user?.name || "Unknown"} ({vendor.user?.email || "N/A"})</p>
-                  <p>Price: Rs. {Number(vendor.price || 0).toLocaleString("en-IN")}</p>
-                  <textarea
-                    placeholder="Optional approval/rejection note for this vendor"
-                    value={noteByVendor[vendor._id] || ""}
-                    onChange={(e) => setNoteByVendor((prev) => ({ ...prev, [vendor._id]: e.target.value }))}
-                  />
-                  <div className="admin-card-actions">
-                    <button
-                      className="approve"
-                      onClick={() => updateApproval(vendor._id, "approved")}
-                      disabled={actionLoadingId === vendor._id + "approved"}
-                    >
-                      {actionLoadingId === vendor._id + "approved" ? "Approving..." : "Approve"}
-                    </button>
-                    <button
-                      className="reject"
-                      onClick={() => updateApproval(vendor._id, "rejected")}
-                      disabled={actionLoadingId === vendor._id + "rejected"}
-                    >
-                      {actionLoadingId === vendor._id + "rejected" ? "Rejecting..." : "Reject"}
-                    </button>
-                    <button
-                      className="reset"
-                      onClick={() => updateApproval(vendor._id, "pending")}
-                      disabled={actionLoadingId === vendor._id + "pending"}
-                    >
-                      {actionLoadingId === vendor._id + "pending" ? "Resetting..." : "Set Pending"}
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
-            {vendors.length === 0 && <p className="admin-info">No vendors in this status.</p>}
-          </div>
+    <>
+      <Navbar />
+      <main className="admin-page">
+        <header className="admin-header"><div><span className="eyebrow">Platform moderation</span><h1>Admin Dashboard</h1><p>Review vendor quality, monitor growth, and keep the marketplace trusted.</p></div></header>
+        {loading ? <LoadingSpinner label="Loading platform activity..." /> : (
+          <>
+            <div className="dashboard-stats admin-stats">{[["Total Users", dashboard?.stats.usersCount || 0], ["Total Vendors", dashboard?.stats.vendorsCount || 0], ["Pending Approvals", dashboard?.stats.pendingCount || 0], ["Approved", dashboard?.stats.approvedCount || 0], ["Rejected", dashboard?.stats.rejectedCount || 0]].map(([label, value]) => <article key={label}><span>{label}</span><strong>{value}</strong></article>)}</div>
+            <div className="admin-tabs">{[["pending", "Pending"], ["approved", "Approved"], ["rejected", "Rejected"], ["all", "All Vendors"], ["users", "All Users"]].map(([value, label]) => <button type="button" key={value} className={tab === value ? "active" : ""} onClick={() => setTab(value)}>{label}</button>)}</div>
+            {error && !decision && <p className="form-error">{error}</p>}
+            {tab === "users" ? (
+              <div className="admin-table"><div className="admin-row admin-row-head"><span>Name</span><span>Email</span><span>Joined</span></div>{users.map((user) => <div className="admin-row" key={user._id}><span>{user.name}</span><span>{user.email}</span><span>{new Date(user.createdAt).toLocaleDateString("en-IN")}</span></div>)}</div>
+            ) : (
+              <div className="admin-table vendor-admin-table"><div className="admin-row admin-row-head"><span>Vendor</span><span>Category</span><span>City</span><span>Submitted by</span><span>Date</span><span>Actions</span></div>{vendors.map((vendor) => <div className="admin-row" key={vendor._id}><span className="admin-vendor"><img src={vendor.image1} alt={vendor.businessname} /><strong>{vendor.businessname}</strong></span><span>{vendor.category}</span><span>{vendor.city}</span><span>{vendor.user?.email || "—"}</span><span>{new Date(vendor.createdAt).toLocaleDateString("en-IN")}</span><span className="admin-actions"><button type="button" className="approve-button" onClick={() => setDecision({ vendor, status: "approved" })}>Approve</button><button type="button" className="reject-button" onClick={() => setDecision({ vendor, status: "rejected" })}>Reject</button></span></div>)}</div>
+            )}
+          </>
         )}
-      </section>
-
-      <section className="admin-users">
-        <div className="admin-section-head">
-          <h2>Recent Users</h2>
-          <p>{users.length} users loaded</p>
-        </div>
-        <div className="admin-user-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Joined</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.slice(0, 30).map((user) => (
-                <tr key={user._id}>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{new Date(user.createdAt).toLocaleDateString()}</td>
-                </tr>
-              ))}
-              {users.length === 0 && (
-                <tr>
-                  <td colSpan="3">No users found.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </div>
+      </main>
+      <Footer />
+      <Modal open={Boolean(decision)} title={`${decision?.status === "approved" ? "Approve" : "Reject"} ${decision?.vendor.businessname || "listing"}`} onClose={() => { setDecision(null); setNote(""); setError(""); }}>
+        <div className="modal-form"><p>{decision?.status === "approved" ? "This listing will become visible to all couples immediately." : "Explain what the vendor should correct before submitting again."}</p><label>{decision?.status === "approved" ? "Optional note" : "Rejection reason *"}<textarea value={note} onChange={(event) => setNote(event.target.value)} /></label>{error && <p className="form-error">{error}</p>}<button type="button" className={`btn ${decision?.status === "approved" ? "btn-primary" : "btn-danger"}`} onClick={submitDecision}>Confirm {decision?.status}</button></div>
+      </Modal>
+    </>
   );
 };
 

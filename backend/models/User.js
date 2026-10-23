@@ -16,7 +16,15 @@ const userSchema = new mongoose.Schema(
       completed: { type: Boolean, default: false },
     },
     vendor: [{ type: mongoose.Schema.Types.ObjectId, ref: "Vendor" }],
-   
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Vendor" }],
+    notifications: [
+      {
+        message: { type: String, required: true },
+        read: { type: Boolean, default: false },
+        createdAt: { type: Date, default: Date.now },
+        link: { type: String, default: "" },
+      },
+    ],
   },
   { timestamps: true }
 );

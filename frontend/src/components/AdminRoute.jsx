@@ -1,11 +1,11 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const AdminRoute = ({ children }) => {
-  const token = localStorage.getItem("token");
-  const isAdmin = localStorage.getItem("isAdmin") === "true";
-  if (!token) return <Navigate to="/login" />;
-  if (!isAdmin) return <Navigate to="/" />;
+  const { isLoggedIn, isAdmin } = useAuth();
+  if (!isLoggedIn) return <Navigate to="/login" replace />;
+  if (!isAdmin) return <Navigate to="/" replace />;
   return children;
 };
 
